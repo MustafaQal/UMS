@@ -1,5 +1,5 @@
  const getUsers = async ()=> {
-    const response = await axios("http://ums12.runasp.net/api/users?limit=100");
+    const response = await axios("https://ums12.runasp.net/api/users?limit=100");
     // const data = response.data.users;
     // return data;
     return response.data;
@@ -40,7 +40,7 @@ displayUsers();
 
 const deleteUser = async (id) => {
     try {
-        const response = await axios.delete(`http://ums12.runasp.net/api/users/${id}`);
+        const response = await axios.delete(`https://ums12.runasp.net/api/users/${id}`);
 
         if (response.status === 200) {
             alert("User deleted successfully ✅");
@@ -58,9 +58,9 @@ const AddForm = document.forms['addUserForm'];
 AddForm.onsubmit = async (e)=>{
     e.preventDefault();
     const formData = new FormData(AddForm);
-    const addNew = await axios.post('http://ums12.runasp.net/api/users',formData);
+    const addNew = await axios.post('https://ums12.runasp.net/api/users',formData);
 
     if(addNew.status === 200){
-        location.href='./users.html'
+        location.href='./index.html'
     }
 }
