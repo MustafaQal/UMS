@@ -1,15 +1,20 @@
- const getUsers = async ()=> {
-    const response = await axios("https://ums12.runasp.net/api/users?limit=100");
-    // const data = response.data.users;
-    // return data;
-    return response.data;
-  
-}
+const getUsers = async () => {
+    try {
+        const response = await axios(`https://ums12.runasp.net/api/users?limit=100`);
+        return response.data;
+    } catch (error) {
+        console.error("Fetch users error:", error);
+        alert("Failed to load users ❌");
+        return null;
+    }
+};
 
-const displayUsers = async ()=>{
-    const usersget =await getUsers(); 
-      console.log(usersget);
-    const users = usersget.users.map((user)=>{
+
+
+const displayUsers = async () => {
+    const usersget = await getUsers();
+    console.log(usersget);
+    const users = usersget.users.map((user) => {
         return `
          <tr class="hover:bg-gray-50 transition">
             <td class="px-3 py-3 text-gray-400 border-b border-gray-100">${user.id}</td>
@@ -30,8 +35,8 @@ const displayUsers = async ()=>{
         
         `
     }).join("");
-    document.querySelector(".userCount").textContent=`${usersget.totalCount} Users 🚨`;
-    document.querySelector(".userTable").innerHTML=users;
+    document.querySelector(".userCount").textContent = `👤 ${usersget.totalCount} Users`;
+    document.querySelector(".userTable").innerHTML = users;
 }
 displayUsers();
 
@@ -55,12 +60,20 @@ const deleteUser = async (id) => {
 
 
 const AddForm = document.forms['addUserForm'];
-AddForm.onsubmit = async (e)=>{
+AddForm.onsubmit = async (e) => {
     e.preventDefault();
-    const formData = new FormData(AddForm);
-    const addNew = await axios.post('https://ums12.runasp.net/api/users',formData);
 
-    if(addNew.status === 200){
-        location.href='./index.html'
+    try {
+        const formData = new FormData(AddForm);
+        const response = await axios.post('https://ums12.runasp.net/api/users', formData);
+
+        if (response.status === 200) {
+            alert("User added successfully ✅");
+            location.href = "./index.html";
+        }
+
+    } catch (error) {
+        console.error("Add user error:", error);
+        alert("Failed to add user ❌");
     }
 }
