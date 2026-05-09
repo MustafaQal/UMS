@@ -21,7 +21,7 @@ const displayUsers = async ()=>{
             </td>
             <td class="px-3 py-3 border-b border-gray-100">
               <div class="flex gap-1.5">
-                <button class="px-2 py-1 text-xs border border-gray-200 rounded-md text-gray-500 hover:bg-gray-50 transition cursor-pointer">View</button>
+                <a href='./user-details.html?userid=${user.id}' target="_blank" class="px-2 py-1 text-xs border border-gray-200 rounded-md text-gray-500 hover:bg-gray-50 transition cursor-pointer">View</a>
                 <button class="px-2 py-1 text-xs border border-gray-200 rounded-md text-gray-500 hover:bg-gray-50 transition cursor-pointer">Edit</button>
                 <button class="px-2 py-1 text-xs border border-red-100 rounded-md text-red-500 hover:bg-red-50 transition cursor-pointer" onclick=deleteUser(${user.id})>Delete</button>
               </div>
