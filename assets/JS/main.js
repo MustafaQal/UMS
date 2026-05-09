@@ -1,3 +1,5 @@
+/* ---------------- getUsers ---------------- */
+
 const getUsers = async () => {
     try {
         const response = await axios(`https://ums12.runasp.net/api/users?limit=100`);
@@ -10,37 +12,82 @@ const getUsers = async () => {
 };
 
 
-
+/* ----------------  displayUsers  ---------------- */
 const displayUsers = async () => {
-    const usersget = await getUsers();
-    console.log(usersget);
-    const users = usersget.users.map((user) => {
-        return `
-         <tr class="hover:bg-gray-50 transition">
-            <td class="px-3 py-3 text-gray-400 border-b border-gray-100">${user.id}</td>
-            <td class="px-3 py-3 font-medium border-b border-gray-100">${user.name}</td>
-            <!-- <td class="px-3 py-3 text-blue-500 border-b border-gray-100">${user.email}</td> -->
-            <!-- <td class="px-3 py-3 border-b border-gray-100">${user.age}</td> --> 
-            <td class="px-3 py-3 text-gray-400 border-b border-gray-100">
-            <img src="${user.imageUrl}" class="w-50 h-50 rounded-full object-cover border" />
-            </td>
-            <td class="px-3 py-3 border-b border-gray-100">
-              <div class="flex gap-1.5">
-                <a href='./user-details.html?userid=${user.id}' target="_blank" class="px-2 py-1 text-xs border border-gray-200 rounded-md text-gray-500 hover:bg-gray-50 transition cursor-pointer">View</a>
-                <button class="px-2 py-1 text-xs border border-gray-200 rounded-md text-gray-500 hover:bg-gray-50 transition cursor-pointer">Edit</button>
-                <button class="px-2 py-1 text-xs border border-red-100 rounded-md text-red-500 hover:bg-red-50 transition cursor-pointer" onclick=deleteUser(${user.id})>Delete</button>
-              </div>
-            </td>
-          </tr>
-        
-        `
-    }).join("");
-    document.querySelector(".userCount").textContent = `👤 ${usersget.totalCount} Users`;
-    document.querySelector(".userTable").innerHTML = users;
-}
+    const loader = document.querySelector(".loader");
+
+    try {
+        loader.style.display = "block";
+
+        const usersData = await getUsers();
+
+        if (!usersData) return;
+
+        const users = usersData.users.map(user => `
+            <tr class="hover:bg-gray-50 transition">
+
+                <td class="px-3 py-3 text-gray-400 border-b">
+                    ${user.id}
+                </td>
+
+                <td class="px-3 py-3 font-medium border-b">
+                    ${user.name}
+                </td>
+
+                <td class="px-3 py-3 border-b">
+                    <img src="${user.imageUrl}" 
+                         class="w-30 h-30 rounded-full object-cover border" />
+                </td>
+
+                <td class="px-3 py-3 border-b">
+                    <div class="flex gap-2">
+
+                        <a href="./user-details.html?userid=${user.id}"
+                           target="_blank"
+                           class="px-2 py-1 text-xs border rounded-md hover:bg-gray-50">
+                           View
+                        </a>
+
+                        <button class="px-2 py-1 text-xs border rounded-md hover:bg-gray-50">
+                            Edit
+                        </button>
+
+                        <button
+                            onclick="deleteUser(${user.id})"
+                            class="px-2 py-1 text-xs border border-red-100 text-red-500 rounded-md hover:bg-red-50">
+                            Delete
+                        </button>
+
+                    </div>
+                </td>
+
+            </tr>
+        `).join("");
+
+        document.querySelector(".userCount").textContent =
+            `${usersData.totalCount} Users 🚀`;
+
+        document.querySelector(".userTable").innerHTML = users;
+
+    } catch (error) {
+        console.error(error);
+
+        document.querySelector(".userTable").innerHTML = `
+            <tr>
+                <td colspan="4" class="text-center py-8 text-red-500">
+                    Failed to load users ❌
+                </td>
+            </tr>
+        `;
+    } finally {
+        loader.style.display = "none"; // Mustafa Note: This always runs: if success or if error
+    }
+};
+
 displayUsers();
 
 
+/* ---------------- deleteUser ---------------- */
 
 
 const deleteUser = async (id) => {
@@ -50,7 +97,7 @@ const deleteUser = async (id) => {
         if (response.status === 200) {
             alert("User deleted successfully ✅");
             displayUsers();
-            //or  location.href='./user.html';
+            //Mustafa Note: or location.href='./user.html';
         }
 
     } catch (error) {
@@ -58,6 +105,7 @@ const deleteUser = async (id) => {
     }
 };
 
+/* ---------------- Add user ---------------- */
 
 const AddForm = document.forms['addUserForm'];
 AddForm.onsubmit = async (e) => {
