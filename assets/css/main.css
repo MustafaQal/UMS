@@ -1,0 +1,7 @@
+tr {
+  transition: all 0.2s ease;
+}
+
+tr:hover {
+  transform: scale(1.005);
+}
