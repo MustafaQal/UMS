@@ -17,7 +17,7 @@ const displayUsers = async ()=>{
             <!-- <td class="px-3 py-3 text-blue-500 border-b border-gray-100">${user.email}</td> -->
             <!-- <td class="px-3 py-3 border-b border-gray-100">${user.age}</td> --> 
             <td class="px-3 py-3 text-gray-400 border-b border-gray-100">
-            <img src="${user.imageUrl}" />
+            <img src="${user.imageUrl}" class="w-50 h-50 rounded-full object-cover border" />
             </td>
             <td class="px-3 py-3 border-b border-gray-100">
               <div class="flex gap-1.5">
